@@ -1,0 +1,9 @@
+Seuraavaksi:
+ItemViewt kaikille rv:ille.
+    main tehty = lastsearchedview
+    basicDataFragment tehty = basicdataview
+    weatherFragment tehty = currentweatherview
+
+    Puuttuu vielä weatherforecastview ennusteille
+
+Datan haku netistä ja olioiden sekä listojen luonti.
