@@ -14,6 +14,7 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import java.util.ArrayList;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
@@ -49,11 +50,54 @@ public class MainActivity extends AppCompatActivity {
         Context context = this;
         MunicipalityDataRetriever mr = new MunicipalityDataRetriever();
 
+        String location = editMunicipalityName.getText().toString();
+
         ExecutorService service = Executors.newSingleThreadExecutor();
         service.execute(new Runnable() {
             @Override
             public void run() {
-                mr.getData(context,"Mikkeli");
+                ArrayList<MunicipalityData> populationData = mr.getPopulationData(context, location);
+                if (populationData == null) {
+                    return;
+                }
+
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        String s = "";
+                        for(MunicipalityData data : populationData) {
+                            s = s + data.getYear() + ": " + data.getPopulation() + "\n";
+                        }
+
+                        textTest.setText(s);
+
+                    }
+                });
+            }
+        });
+    }
+
+    public void testFindTwo (View view) {
+        Context context = this;
+        MunicipalityDataRetriever mr = new MunicipalityDataRetriever();
+
+        String location = editMunicipalityName.getText().toString();
+
+        ExecutorService service = Executors.newSingleThreadExecutor();
+        service.execute(new Runnable() {
+            @Override
+            public void run() {
+                String selfSufficiency = mr.getSelfSufficiency(context, location);
+                if (selfSufficiency == null) {
+                    return;
+                }
+
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        textTest.setText(selfSufficiency);
+                    }
+                });
             }
         });
     }

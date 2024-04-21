@@ -7,3 +7,9 @@ ItemViewt kaikille rv:ille.
     Puuttuu vielä weatherforecastview ennusteille
 
 Datan haku netistä ja olioiden sekä listojen luonti.
+
+MainActivyyn uusi lista, johon kerätään käyttäjän jo hakemat
+kaupungit. Lista näytetään rv:ssä MainActivityssä.
+Haettu data pitää saada siirrettyä fragmenteille.
+Haettuun dataan tarvitaan kunnan nimi, väkiluku, väestönkehitys,
+työpaikkaomavaraisuus ja työllisyysaste.
