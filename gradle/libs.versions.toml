@@ -1,8 +1,11 @@
 [versions]
 agp = "8.3.0"
 jacksonAnnotations = "2.16.0"
+jacksonAnnotationsVersion = "2.16.0"
 jacksonCore = "2.16.0"
+jacksonCoreVersion = "2.16.0"
 jacksonDatabind = "2.16.0"
+jacksonDatabindVersion = "2.16.0"
 junit = "4.13.2"
 junitVersion = "1.1.5"
 espressoCore = "3.5.1"
@@ -13,7 +16,10 @@ constraintlayout = "2.1.4"
 
 [libraries]
 core-jackson-annotations = { module = "com.fasterxml.jackson.core:jackson-annotations", version.ref = "jacksonAnnotations" }
+core-jackson-core = { module = "com.fasterxmal.jackson.core:jackson-core", version.ref = "jacksonCoreVersion" }
 core-jackson-databind = { module = "com.fasterxml.jackson.core:jackson-databind", version.ref = "jacksonDatabind" }
+fasterxmal-jackson-annotations = { module = "com.fasterxmal.jackson.core:jackson-annotations", version.ref = "jacksonAnnotationsVersion" }
+fasterxmal-jackson-databind = { module = "com.fasterxmal.jackson.core:jackson-databind", version.ref = "jacksonDatabindVersion" }
 jackson-core = { module = "com.fasterxml.jackson.core:jackson-core", version.ref = "jacksonCore" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 ext-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }

@@ -7,6 +7,14 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
+    <TextView
+        android:id="@+id/textTest"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="TextView"
+        app:layout_constraintBottom_toTopOf="@+id/buttonSearchData"
+        app:layout_constraintTop_toBottomOf="@+id/editMunicipalityName" />
+
     <EditText
         android:id="@+id/editMunicipalityName"
         android:layout_width="wrap_content"
@@ -25,7 +33,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
-        android:onClick="switchToTabActivity"
+        android:onClick="testFind"
         android:text="Hae kunnan tiedot"
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
