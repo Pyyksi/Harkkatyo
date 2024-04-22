@@ -211,11 +211,11 @@ public class MunicipalityDataRetriever {
         ArrayList<String> keys = new ArrayList<>();
         ArrayList<String> values = new ArrayList<>();
 
-        for (JsonNode node : areas.get("variables").get(1).get("values")) {
+        for (JsonNode node : areas.get("variables").get(0).get("values")) {
             values.add(node.asText());
         }
 
-        for (JsonNode node : areas.get("variables").get(1).get("valueTexts")) {
+        for (JsonNode node : areas.get("variables").get(0).get("valueTexts")) {
             keys.add(node.asText());
         }
 
