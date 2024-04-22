@@ -9,14 +9,20 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 
+import javax.crypto.AEADBadTagException;
+
 public class BasicDataAdapter extends RecyclerView.Adapter<BasicDataViewHolder> {
 
     private ArrayList<MunicipalityData> populationData;
+    private ArrayList<SelfSufficiencyData> selfSufficiencyData;
+    private ArrayList<EmploymentData> employmentData;
     private Context context;
 
-    public BasicDataAdapter(Context context, ArrayList<MunicipalityData> populationData) {
+    public BasicDataAdapter(Context context, ArrayList<MunicipalityData> populationData, ArrayList<SelfSufficiencyData> selfSufficiencyData, ArrayList<EmploymentData> employmentData) {
         this.context = context;
         this.populationData = populationData;
+        this.selfSufficiencyData = selfSufficiencyData;
+        this.employmentData = employmentData;
     }
     @NonNull
     @Override
@@ -27,14 +33,17 @@ public class BasicDataAdapter extends RecyclerView.Adapter<BasicDataViewHolder> 
     @Override
     public void onBindViewHolder(@NonNull BasicDataViewHolder holder, int position) {
         MunicipalityData data = populationData.get(position);
-        holder.textYear.setText(String.valueOf(data.getYear()));
-        holder.textPopulation.setText(String.valueOf(data.getPopulation()));
-        holder.textSelfSufficiency.setText(String.valueOf(data.getYear()));
-
+        SelfSufficiencyData self = selfSufficiencyData.get(position);
+        EmploymentData emp = employmentData.get(position);
+        holder.textYear.setText(new StringBuilder().append("Vuosi:   ").append(String.valueOf(data.getYear())).toString());
+        holder.textPopulation.setText(new StringBuilder().append("Asukasluku:   ").append(String.valueOf(data.getPopulation())));
+        holder.textSelfSufficiency.setText(new StringBuilder().append("Työpaikkaomavaraisuus:   ").append(String.valueOf(self.getSelfSufficiency())));
+        holder.textEmploymentRate.setText(new StringBuilder().append("Työllisyysaste   ").append(String.valueOf(emp.getEmploymentRate())));
     }
 
     @Override
     public int getItemCount() {
-        return populationData.size();
+
+        return Math.min(populationData.size(), Math.min(selfSufficiencyData.size(), employmentData.size()));
     }
 }

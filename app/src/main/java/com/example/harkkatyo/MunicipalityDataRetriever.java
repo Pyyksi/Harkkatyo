@@ -107,10 +107,9 @@ public class MunicipalityDataRetriever {
         return null;
     }
 
-    public String getSelfSufficiency(Context context, String municipality) {
+    public ArrayList<SelfSufficiencyData> getSelfSufficiencyData(Context context, String municipality) {
 
         ObjectMapper objectMapper = new ObjectMapper();
-
         JsonNode areas = null;
         try {
             areas = objectMapper.readTree(new URL("https://statfin.stat.fi/PxWeb/api/v1/en/StatFin/tyokay/statfin_tyokay_pxt_125s.px"));
@@ -133,7 +132,7 @@ public class MunicipalityDataRetriever {
 
         HashMap<String, String> municipalityCodes = new HashMap<>();
 
-        for (int i = 0; i < keys.size(); i++) {
+        for(int i = 0; i < keys.size(); i++) {
             municipalityCodes.put(keys.get(i), values.get(i));
         }
 
@@ -151,9 +150,9 @@ public class MunicipalityDataRetriever {
             con.setRequestProperty("Accept", "application/json");
             con.setDoOutput(true);
 
-            JsonNode jsonInputString = objectMapper.readTree(context.getResources().openRawResource(R.raw.queryemployment));
+            JsonNode jsonInputString = objectMapper.readTree(context.getResources().openRawResource(R.raw.queryselfsufficiency));
 
-            ((ObjectNode) jsonInputString.get("query").get(1).get("selection")).putArray("values").add(code);
+            ((ObjectNode) jsonInputString.get("query").get(0).get("selection")).putArray("values").add(code);
 
             byte[] input = objectMapper.writeValueAsBytes(jsonInputString);
             OutputStream os = con.getOutputStream();
@@ -163,14 +162,28 @@ public class MunicipalityDataRetriever {
             StringBuilder response = new StringBuilder();
             String line = null;
             while ((line = br.readLine()) != null) {
-                response.append(line);
+                response.append(line.trim());
             }
 
-            JsonNode selfSufficiencyData = objectMapper.readTree(response.toString());
+            JsonNode municipalityData = objectMapper.readTree(response.toString());
 
-            String selfSufficiency = selfSufficiencyData.get("value").asText();
+            ArrayList<String> years = new ArrayList<>();
+            ArrayList<String> selfSuffiencies = new ArrayList<>();
 
-            return selfSufficiency;
+            for (JsonNode node : municipalityData.get("dimension").get("Vuosi").get("category").get("label")) {
+                years.add(node.asText());
+            }
+
+            for (JsonNode node : municipalityData.get("value")) {
+                selfSuffiencies.add(node.asText());
+            }
+
+            ArrayList<SelfSufficiencyData> selfSufficiencyData = new ArrayList<>();
+
+            for (int i = 0; i < years.size(); i++) {
+                selfSufficiencyData.add(new SelfSufficiencyData(municipality, Integer.valueOf(years.get(i)), Float.valueOf(selfSuffiencies.get(i))));
+            }
+            return selfSufficiencyData;
 
         } catch (MalformedURLException e) {
             // TODO Auto-generated catch block
@@ -180,6 +193,94 @@ public class MunicipalityDataRetriever {
             e.printStackTrace();
         }
         return null;
+    }
 
+    public ArrayList<EmploymentData> getEmploymentData(Context context, String municipality) {
+
+        ObjectMapper objectMapper = new ObjectMapper();
+
+        JsonNode areas = null;
+        try {
+            areas = objectMapper.readTree(new URL("https://statfin.stat.fi/PxWeb/api/v1/en/StatFin/tyokay/statfin_tyokay_pxt_115x.px"));
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        ArrayList<String> keys = new ArrayList<>();
+        ArrayList<String> values = new ArrayList<>();
+
+        for (JsonNode node : areas.get("variables").get(1).get("values")) {
+            values.add(node.asText());
+        }
+
+        for (JsonNode node : areas.get("variables").get(1).get("valueTexts")) {
+            keys.add(node.asText());
+        }
+
+        HashMap<String, String> municipalityCodes = new HashMap<>();
+
+        for(int i = 0; i < keys.size(); i++) {
+            municipalityCodes.put(keys.get(i), values.get(i));
+        }
+
+        String code = null;
+
+        code = null;
+        code = (municipalityCodes.get(municipality));
+
+        try {
+            URL url = new URL("https://pxdata.stat.fi:443/PxWeb/api/v1/fi/StatFin/tyokay/statfin_tyokay_pxt_115x.px");
+
+            HttpURLConnection con = (HttpURLConnection) url.openConnection();
+            con.setRequestMethod("POST");
+            con.setRequestProperty("Content-Type", "application/json; utf-8");
+            con.setRequestProperty("Accept", "application/json");
+            con.setDoOutput(true);
+
+            JsonNode jsonInputString = objectMapper.readTree(context.getResources().openRawResource(R.raw.queryemploymentrate));
+
+            ((ObjectNode) jsonInputString.get("query").get(0).get("selection")).putArray("values").add(code);
+
+            byte[] input = objectMapper.writeValueAsBytes(jsonInputString);
+            OutputStream os = con.getOutputStream();
+            os.write(input, 0, input.length);
+
+            BufferedReader br = new BufferedReader(new InputStreamReader(con.getInputStream(), "utf-8"));
+            StringBuilder response = new StringBuilder();
+            String line = null;
+            while ((line = br.readLine()) != null) {
+                response.append(line.trim());
+            }
+
+            JsonNode municipalityData = objectMapper.readTree(response.toString());
+
+            ArrayList<String> years = new ArrayList<>();
+            ArrayList<String> employmentRates = new ArrayList<>();
+
+            for (JsonNode node : municipalityData.get("dimension").get("Vuosi").get("category").get("label")) {
+                years.add(node.asText());
+            }
+
+            for (JsonNode node : municipalityData.get("value")) {
+                employmentRates.add(node.asText());
+            }
+
+            ArrayList<EmploymentData> employmentData = new ArrayList<>();
+
+            for (int i = 0; i < years.size(); i++) {
+                employmentData.add(new EmploymentData(municipality, Integer.valueOf(years.get(i)), Float.valueOf(employmentRates.get(i))));
+            }
+            return employmentData;
+
+        } catch (MalformedURLException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return null;
     }
 }

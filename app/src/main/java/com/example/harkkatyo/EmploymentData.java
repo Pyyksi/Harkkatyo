@@ -1,18 +1,28 @@
 package com.example.harkkatyo;
 
-public class EmploymentData {
+import java.io.Serializable;
 
-    private String selfSufficiency;
+public class EmploymentData implements Serializable {
 
-    public EmploymentData (String selfSufficiency) {
-        selfSufficiency = selfSufficiency;
+    private String name;
+    private int year;
+    private Float employmentRate;
+
+    public EmploymentData(String n, int y, Float er) {
+        name = n;
+        year = y;
+        employmentRate = er;
     }
 
-    public String getSelfSufficiency() {
-        return selfSufficiency;
+    public String getName() {
+        return name;
     }
 
-    public void setSelfSufficiency(String selfSufficiency) {
-        this.selfSufficiency = selfSufficiency;
+    public int getYear() {
+        return year;
+    }
+
+    public Float getEmploymentRate() {
+        return employmentRate;
     }
 }

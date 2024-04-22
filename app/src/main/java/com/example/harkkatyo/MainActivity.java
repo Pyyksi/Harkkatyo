@@ -19,6 +19,7 @@ public class MainActivity extends AppCompatActivity {
     //Visual elements
     private EditText editMunicipalityName;
     private ArrayList<MunicipalityData> populationData;
+    private ArrayList<SelfSufficiencyData> selfSufficiencyData;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,14 +47,18 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void run() {
                 ArrayList<MunicipalityData> populationData = mr.getPopulationData(context, location);
-                if (populationData == null) {
+                ArrayList<SelfSufficiencyData> selfSufficiencyData = mr.getSelfSufficiencyData(context, location);
+                ArrayList<EmploymentData> employmentData = mr.getEmploymentData(context, location);
+                if ((populationData == null) || ((selfSufficiencyData == null) || (employmentData == null))){
                     return;
                 }
                 runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
                         Intent intent = new Intent(context, TabActivity.class);
-                        intent.putExtra("data", populationData);
+                        intent.putExtra("populationdata", populationData);
+                        intent.putExtra("selfsufficiencydata", selfSufficiencyData);
+                        intent.putExtra("employmentdata", employmentData);
                         startActivity(intent);
                     }
                 });
