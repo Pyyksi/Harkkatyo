@@ -93,7 +93,7 @@ public class MunicipalityDataRetriever {
             ArrayList<MunicipalityData> populationData = new ArrayList<>();
 
             for (int i = 0; i < years.size(); i++) {
-                populationData.add(new MunicipalityData(Integer.valueOf(years.get(i)), Integer.valueOf(populations.get(i))));
+                populationData.add(new MunicipalityData(municipality, Integer.valueOf(years.get(i)), Integer.valueOf(populations.get(i))));
             }
             return populationData;
 

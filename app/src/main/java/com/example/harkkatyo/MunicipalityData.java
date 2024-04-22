@@ -1,15 +1,20 @@
 package com.example.harkkatyo;
 
-public class MunicipalityData {
+import android.os.Parcelable;
 
+import java.io.Serializable;
+import java.util.ArrayList;
+
+public class MunicipalityData implements Serializable {
+    private String name;
     private int year;
     private int population;
 
-    public MunicipalityData(int y, int p) {
+    public MunicipalityData(String n, int y, int p) {
+        name = n;
         year = y;
         population = p;
     }
-
     public int getYear() {
         return year;
     }
@@ -21,5 +26,11 @@ public class MunicipalityData {
     }
     public void setPopulation(int population) {
         this.population = population;
+    }
+    public String getName() {
+        return name;
+    }
+    public void setName(String name) {
+        this.name = name;
     }
 }
